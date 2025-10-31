@@ -6,10 +6,9 @@ import jwt as jwt_token
 from dotenv import load_dotenv
 from fastapi import Header
 
-from src.logger.custom_logger import get_logger
-from src.utils.exception_handler.auth_error_class import InvalidTokenException, MissingTokenException, \
-    ExpiredAccessTokenException
-from src.utils.path import path_dic
+from src.common.utils.auth_error_class import MissingTokenException, InvalidTokenException, ExpiredAccessTokenException
+from src.common.utils.logger.custom_logger import get_logger
+from src.common.utils.path import path_dic
 
 path = path_dic["env"]
 load_dotenv(path)
