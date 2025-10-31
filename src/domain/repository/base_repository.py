@@ -1,8 +1,8 @@
 from sqlalchemy import select, join, and_, outerjoin
 from sqlalchemy.exc import IntegrityError
 
-from src.infra.database.repository.maria_engine import get_engine
-from src.logger.custom_logger import get_logger
+from src.common.utils.logger.custom_logger import get_logger
+from src.config.maria_engine import get_engine
 
 
 class BaseRepository:
