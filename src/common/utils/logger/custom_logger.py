@@ -5,7 +5,7 @@ import logging.config
 import os
 from pathlib import Path
 
-from ..utils.path import path_dic
+from src.common.utils.path import path_dic
 
 logger_cache = {}
 logger_abs_path = os.path.abspath(os.path.dirname(__file__))
