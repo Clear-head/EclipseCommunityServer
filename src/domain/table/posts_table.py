@@ -9,5 +9,6 @@ posts_table = Table(
     Column('title', String(255)),
     Column('user_id', String(255), ForeignKey('users.id'), nullable=False),
     Column('create_at', DateTime, nullable=False),
-    Column("body", Text, nullable=True)
+    Column("body", Text, nullable=True),
+    Column("merge_history_id",String(255), ForeignKey('merge_history.id'), nullable=False),
 )

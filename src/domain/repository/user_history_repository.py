@@ -1,9 +1,10 @@
-from src.domain.entity.user_history_entity import UserHistoryEntity
-from src.domain.repository.base_repository import BaseRepository
-from src.domain.table.user_history_table import user_history_table
+from src.domain.entities.user_history_entity import UserHistoryEntity
+from src.infra.database.repository import base_repository
+from src.infra.database.tables.table_user_history import user_history_table
 
 
-class UserHistoryRepository(BaseRepository):
+
+class UserHistoryRepository(base_repository.BaseRepository):
     def __init__(self):
         super().__init__()
         self.table = user_history_table

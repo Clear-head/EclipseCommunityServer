@@ -8,4 +8,4 @@ class CommentEntity(BaseEntity):
     post_id: str
     user_id: str
     body: str
-    created_at: datetime
+    create_at: datetime

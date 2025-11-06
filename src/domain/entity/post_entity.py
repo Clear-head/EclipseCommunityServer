@@ -8,4 +8,5 @@ class PostEntity(BaseEntity):
     title: str
     body: str
     user_id: str
-    created_at: datetime
+    create_at: datetime
+    merge_history_id: str
