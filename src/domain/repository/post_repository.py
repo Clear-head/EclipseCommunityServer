@@ -1,6 +1,9 @@
+from sqlalchemy import desc
+
+from src.config.maria_engine import get_engine
+from src.domain.entity.post_entity import PostEntity
 from src.domain.repository.base_repository import BaseRepository
 from src.domain.table.posts_table import posts_table
-from src.domain.entity.post_entity import PostEntity
 
 
 class PostRepository(BaseRepository):
@@ -21,3 +24,18 @@ class PostRepository(BaseRepository):
 
     async def delete(self, **filters):
         return await super().delete(**filters)
+
+    async def select_root(self, page):
+        try:
+            engine = await get_engine()
+            page -= 1
+
+            async with engine.begin() as conn:
+                stmt = self.table.select().offset(page*10).limit(10).order_by(desc(self.table.c.create_at))
+                result = await conn.execute(stmt)
+
+            return [self.entity(**i) for i in result.mappings()]
+
+        except Exception as e:
+            self.logger.error(f"insert error: {e}")
+            raise e
