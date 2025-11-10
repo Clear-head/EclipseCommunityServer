@@ -5,8 +5,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from src.logger.custom_logger import get_logger
-from src.utils.exception_handler.auth_error_class import AuthException
+from src.common.utils.auth_error_class import AuthException
+from src.common.utils.logger.custom_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -15,7 +15,7 @@ def setup_exception_handlers(app: FastAPI):
     @app.exception_handler(AuthException)
     async def auth_exception_handler(request: Request, exc: AuthException):
         logger.error(f"Auth error: {exc.message} - Path: {request.url.path}")
-        logger.error(traceback.format_exc())
+        # logger.error(traceback.format_exc())
 
         return JSONResponse(
             status_code=exc.status_code,
@@ -34,7 +34,7 @@ def setup_exception_handlers(app: FastAPI):
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request: Request, exc: RequestValidationError):
         logger.error(f"Validation error: {exc.errors()} - Path: {request.url.path}")
-        logger.error(traceback.format_exc())
+        # logger.error(traceback.format_exc())
 
         errors = []
         for error in exc.errors():

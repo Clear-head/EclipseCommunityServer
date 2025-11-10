@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from sqlalchemy import select, join, and_, outerjoin, desc
 from sqlalchemy.exc import IntegrityError
 

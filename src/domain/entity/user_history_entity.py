@@ -3,8 +3,8 @@ from typing import Optional
 
 from pydantic import field_validator, ValidationError
 
-from src.domain.entities.base_entity import BaseEntity
-from src.utils.uuid_maker import generate_uuid
+from src.common.utils.uuid_maker import generate_uuid
+from src.domain.entity.base_entity import BaseEntity
 
 
 class UserHistoryEntity(BaseEntity):

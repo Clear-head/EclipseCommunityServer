@@ -1,9 +1,7 @@
 from datetime import datetime
 
-from pydantic import field_validator
-
-from src.domain.entities.base_entity import BaseEntity
-from src.utils.uuid_maker import generate_uuid
+from src.common.utils.uuid_maker import generate_uuid
+from src.domain.entity.base_entity import BaseEntity
 
 
 class MergeHistoryEntity(BaseEntity):

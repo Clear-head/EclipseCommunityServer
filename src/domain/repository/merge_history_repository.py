@@ -1,6 +1,6 @@
-from src.domain.entities.merge_history_entity import MergeHistoryEntity
-from src.infra.database.repository.base_repository import BaseRepository
-from src.infra.database.tables.table_merge_history import merge_history_table
+from src.domain.entity.merge_history_entity import MergeHistoryEntity
+from src.domain.repository.base_repository import BaseRepository
+from src.domain.table.table_merge_history import merge_history_table
 
 
 class MergeHistoryRepository(BaseRepository):
