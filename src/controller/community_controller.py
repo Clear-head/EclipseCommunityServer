@@ -1,34 +1,47 @@
 from fastapi import Depends, APIRouter
 from starlette.responses import JSONResponse
 
+from src.common.dto.comment_dto import RequestWriteComment, RequestDeleteComment
+from src.common.dto.post_dto import RequestWritePost, RequestDeletePost
 from src.common.utils.logger.custom_logger import get_logger
-from src.service.auth.jwt import validate_jwt_token
+from src.service.auth.jwt import validate_jwt_token, get_jwt_user_id
+from src.service.application.notice_board import NoticeBoard
 
 router = APIRouter(
-    prefix="/api/comunity",
+    prefix="/api/community",
     dependencies=[Depends(validate_jwt_token)]
 )
 logger = get_logger(__name__)
+notice_board = NoticeBoard()
 
 #   커뮤니티 글 목록 (홈)
 @router.get("/home/{page}")
-async def home(page: str = None, ) -> JSONResponse:
-    pass
+async def home(page: int = 1) -> JSONResponse:
+    return await notice_board.view_post_list(page)
 
 
 #   특정 글 읽기
-@router.get("/read-post")
-async def read_post():
-    pass
+@router.get("/post/{post_id}")
+async def read_post(post_id: int) -> JSONResponse:
+    return await notice_board.view_post_detail(post_id)
 
+
+@router.delete("/post")
+async def delete_post(dto: RequestDeletePost, user_id:str = Depends(get_jwt_user_id)) -> JSONResponse:
+    return JSONResponse(status_code=200, content=(await notice_board.delete_post(user_id, dto)))
 
 #   글 쓰기
-@router.get("/write-post")
-async def write_post() -> JSONResponse:
-    pass
+@router.post("/post")
+async def write_post(dto: RequestWritePost, user_id:str = Depends(get_jwt_user_id)) -> JSONResponse:
+    return JSONResponse(status_code=200, content=await notice_board.write_post(user_id, dto))
 
 
 #   댓글 쓰기
-@router.get("/write-commnet/{post_id}")
-async def write_comment(post_id: str):
-    pass
+@router.post("/comment/{post_id}")
+async def write_comment(dto: RequestWriteComment, user_id:str = Depends(get_jwt_user_id)):
+    return JSONResponse(status_code=200, content=await notice_board.write_comment(user_id, dto))
+
+
+@router.delete("/comment")
+async def delete_comment(dto: RequestDeleteComment, user_id:str = Depends(get_jwt_user_id)) -> JSONResponse:
+    return JSONResponse(status_code=200, content=await notice_board.delete_comment(user_id, dto))
