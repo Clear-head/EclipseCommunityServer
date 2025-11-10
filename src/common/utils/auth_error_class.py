@@ -5,6 +5,11 @@ class AuthException(Exception):
         super().__init__(self.message)
 
 
+class InvalidCredentialsException(AuthException):
+    def __init__(self, message: str = "아이디 또는 비밀번호가 올바르지 않습니다."):
+        super().__init__(message, status_code=401)
+
+
 class UserNotFoundException(AuthException):
     def __init__(self, message: str = "사용자를 찾을 수 없습니다."):
         super().__init__(message, status_code=404)
@@ -24,7 +29,6 @@ class ExpiredAccessTokenException(AuthException):
     def __init__(self, message: str = "토큰이 만료되었습니다."):
         super().__init__(message, status_code=401)
 
-
 class ExpiredRefreshTokenException(AuthException):
     def __init__(self, message: str = "토큰이 만료되었습니다."):
         super().__init__(message, status_code=401)
@@ -37,6 +41,11 @@ class MissingTokenException(AuthException):
 
 class InvalidHeaderException(AuthException):
     def __init__(self, message: str = "헤더가 올바르지 않습니다."):
+        super().__init__(message, status_code=400)
+
+
+class WeakPasswordException(AuthException):
+    def __init__(self, message: str = "비밀번호는 8자 이상이어야 합니다."):
         super().__init__(message, status_code=400)
 
 
