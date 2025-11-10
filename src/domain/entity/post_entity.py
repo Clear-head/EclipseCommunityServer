@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import Optional
 
 from src.domain.entity.base_entity import BaseEntity
 
 
 class PostEntity(BaseEntity):
-    id: int
+    id: Optional[int] = None
     title: str
     body: str
     user_id: str
