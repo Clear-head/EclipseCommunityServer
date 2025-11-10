@@ -1,11 +1,12 @@
 from datetime import datetime
+from typing import Optional
 
 from src.domain.entity.base_entity import BaseEntity
 
 
 class CommentEntity(BaseEntity):
-    id: str
-    post_id: str
+    id: Optional[int] = None
+    post_id: int
     user_id: str
     body: str
     create_at: datetime
