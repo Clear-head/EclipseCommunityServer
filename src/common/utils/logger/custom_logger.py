@@ -21,7 +21,7 @@ def get_logger(name):
     name = list(name.split('.'))
     name = '.'.join(name[:1])
 
-    log_path = Path(logger_abs_path).parent.parent.joinpath('logs').joinpath(name)
+    log_path = Path(logger_abs_path).parent.parent.parent.joinpath('logs').joinpath(name)
 
     cache_key = (name, log_path)
     if cache_key in logger_cache:

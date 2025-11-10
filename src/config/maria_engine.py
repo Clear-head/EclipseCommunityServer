@@ -13,7 +13,7 @@ async def get_engine() -> AsyncEngine:
         return _ENGINE
 
     try:
-        config_path = Path(__file__).parent.parent.parent.parent.joinpath('resources').joinpath('config').joinpath('database_config.json')
+        config_path = Path(__file__).parent.parent.joinpath('resources').joinpath('config').joinpath('database_config.json')
 
         with open(config_path) as f:
             config = load(f)["maria"]
