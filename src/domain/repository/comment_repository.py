@@ -1,6 +1,6 @@
 from src.domain.entity.comment_entity import CommentEntity
 from src.domain.repository.base_repository import BaseRepository
-from src.domain.table import comment_table
+from src.domain.table.comment_table import comment_table
 
 
 class CommentRepository(BaseRepository):
