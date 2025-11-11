@@ -1,4 +1,5 @@
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, Header
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from src.common.dto.comment_dto import RequestWriteComment, RequestDeleteComment
@@ -34,6 +35,12 @@ async def delete_post(dto: RequestDeletePost, user_id:str = Depends(get_jwt_user
 @router.post("/post")
 async def write_post(dto: RequestWritePost, user_id:str = Depends(get_jwt_user_id)) -> JSONResponse:
     return JSONResponse(status_code=200, content=await notice_board.write_post(user_id, dto))
+
+
+#   내가 쓴 게시글 보기
+@router.post("/post/me")
+async def read_post_search(request: Request, user_id: str = Depends(get_jwt_user_id)) -> JSONResponse:
+    return await notice_board.search_post(user_id)
 
 
 #   댓글 쓰기

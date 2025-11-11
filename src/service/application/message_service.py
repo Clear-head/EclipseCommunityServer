@@ -1,10 +1,6 @@
 from datetime import datetime
-
-from Tools.demo.mcast import receiver
-from pydantic import BaseModel
-
 from src.common.dto.message_dto import RequestSendMessage, ResponseReceiveMessage, ResponseReceiveMessageList, \
-    MessageDto
+    MessageDto, SendMessage
 from src.common.utils.logger.custom_logger import get_logger
 from src.domain.entity.message_entity import MessageEntity
 from src.domain.repository.message_repository import MessageRepository
@@ -48,12 +44,12 @@ class MessageService:
     #   채팅 방 조회
     async def get_message_list(self, user_id: str):
         try:
+
             self.logger.info(f"getting messages for user {user_id}")
-            result = await self.message_repo.select(receiver=user_id, columns=["sender", "create_at"])
-            result = sorted(result, key=lambda r: r["create_at"], reverse=True)
+            result = await self.message_repo.get_latest_messages_by_sender(user_id=user_id)
 
             return ResponseReceiveMessageList(
-                received_messages=result
+                chat_rooms=[SendMessage(sender=i[0], last_message=i[1], create_at=i[2]) for i in result]
             )
 
         except Exception as e:
@@ -68,18 +64,19 @@ class MessageService:
             self.logger.info(f"getting message for user {user_id} with {sender_id}")
 
             ans = []
-            result = await self.message_repo.select(sender=[user_id, sender_id], receiver=[user_id, sender_id])
+            result = await self.message_repo.select(sender=user_id, receiver=sender_id)
+            result.extend(await self.message_repo.select(sender=sender_id, receiver=user_id))
 
             for i in result:
                 ans.append(
                     MessageDto(
-                        create_at=i.send_at,
+                        send_at=i.send_at,
                         message=i.body,
                         send_receive= True if i.sender == user_id else False,
                     )
                 )
 
-            return ResponseReceiveMessage(messages=sorted(ans, key=lambda r: r["create_at"], reverse=True))
+            return ResponseReceiveMessage(messages=sorted(ans, key=lambda r: r.send_at))
 
         except Exception as e:
             self.logger.error(e)

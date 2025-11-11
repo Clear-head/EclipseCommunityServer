@@ -9,6 +9,7 @@ class RequestWriteComment(BaseModel):
 
 
 class Comment(BaseModel):
+    comment_id: int
     user_id: str
     user_nickname: str
     create_at: datetime

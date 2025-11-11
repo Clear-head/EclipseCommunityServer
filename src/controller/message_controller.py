@@ -18,16 +18,13 @@ message_service = MessageService()
 #   채팅방 목록
 @router.get("/")
 async def get_message_list(user_id:str = Depends(get_jwt_user_id)):
-    return JSONResponse(status_code=200, content=await message_service.get_message_list(user_id))
+    return await message_service.get_message_list(user_id)
 
 
 #   채팅 조회
 @router.get("/{sender_id}")
 async def get_message_detail(sender_id: str, user_id:str = Depends(get_jwt_user_id)):
-    return JSONResponse(
-        status_code=200,
-        content= await message_service.get_message(user_id, sender_id)
-    )
+    return await message_service.get_message(user_id, sender_id)
 
 
 #   채팅 보내기

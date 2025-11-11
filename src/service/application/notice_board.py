@@ -1,8 +1,10 @@
 from datetime import datetime
 
+from src.common import dto
 from src.common.dto.comment_dto import RequestDeleteComment
 from src.common.dto.post_dto import Post, ResponsePostList, Comment, ResponsePostDetail, RequestWritePost, \
     RequestDeletePost
+from src.common.utils.auth_error_class import UserNotFoundException
 from src.common.utils.logger.custom_logger import get_logger
 from src.domain.entity.comment_entity import CommentEntity
 from src.domain.entity.post_entity import PostEntity
@@ -11,6 +13,8 @@ from src.domain.repository.merge_history_repository import MergeHistoryRepositor
 from src.domain.repository.post_repository import PostRepository
 from src.domain.repository.user_history_repository import UserHistoryRepository
 from src.domain.repository.users_repository import UserRepository
+from src.domain.table.table_merge_history import merge_history_table
+from src.domain.table.users_table import users_table
 
 
 class NoticeBoard:
@@ -50,15 +54,10 @@ class NoticeBoard:
             result = []
 
             posts = await self.post_repo.select_root(page = page)
-            self.logger.info(f"view post: {posts}")
             if posts:
                 for post in posts:
-                    user = (await self.user_repo.select(user_id = post.user_id))[0]
-                    self.logger.info(f"view post user name : {post.user_id}")
-
+                    user = (await self.user_repo.select(id = post.user_id))[0]
                     m_hist = (await self.merge_history_repo.select(id = post.merge_history_id))[0]
-                    self.logger.info(f"view post merge history id : {m_hist.categories_name}")
-
                     result.append(
                         Post(
                             post_id = post.id,
@@ -83,12 +82,13 @@ class NoticeBoard:
 
             comments = []
             result = (await self.post_repo.select(id = post_id))[0]
-            comment_selected = await self.comment_repo.select(post_id = post_id, order = 'create_at')
+            comment_selected = sorted(await self.comment_repo.select(post_id = post_id), key = lambda x: x.create_at)
 
             for i in comment_selected:
                 nick_name = (await self.user_repo.select(id = i.user_id))[0].nickname
                 comments.append(
                     Comment(
+                        comment_id = i.id,
                         user_id = i.user_id,
                         user_nickname = nick_name,
                         create_at=i.create_at,
@@ -102,6 +102,7 @@ class NoticeBoard:
                 comments=comments,
                 create_at=result.create_at,
                 user_id=result.user_id,
+                merge_history_id=result.merge_history_id,
                 user_nickname=(await self.user_repo.select(id = result.user_id))[0].nickname
             )
         except Exception as e:
@@ -113,11 +114,57 @@ class NoticeBoard:
         try:
             self.logger.info(f"delete post: {user_id}")
             if await self.user_repo.select(id=user_id):
-                await self.post_repo.delete(post_id = dto.post_id)
+                await self.post_repo.delete(id = dto.post_id, user_id = user_id)
+            else:
+                raise UserNotFoundException()
 
             return "success"
+
+        except UserNotFoundException as e:
+            self.logger.error(e)
+            raise e
+
         except Exception as e:
             self.logger.error(e)
+            raise e
+
+
+    #   일단은 내 게시글 히스토리
+    async def search_post(self, user_id):
+        try:
+            self.logger.info(f"search post: {user_id}")
+            posts = await self.post_repo.select(
+                return_dto=Post,
+                user_id=user_id,
+                joins=[
+                    {
+                        'table': users_table,
+                        'on': {'user_id': 'id'},
+                        'alias': 'user'
+                    },
+                    {
+                        'table': merge_history_table,
+                        "on": {"merge_history_id": "id"},
+                        "alias": "merge_history"
+                    }
+                ],
+                columns={
+                    "id": "post_id",
+                    "title": "title",
+                    "body": "body",
+                    "create_at": "uploaded_at",
+                    "merge_history.categories_name": "merge_history_name",
+                    "user.nickname": "user_nickname"
+                },
+                order="create_at"
+            )
+            print(posts)
+
+            return ResponsePostList(posts=posts)
+
+        except Exception as e:
+            self.logger.error(e)
+            raise e
 
 
     #   댓글 작성
@@ -145,7 +192,7 @@ class NoticeBoard:
         try:
             self.logger.info(f"delete comment: {user_id}")
             if await self.user_repo.select(id=user_id):
-                await self.comment_repo.delete(post_id = dto.post_id, comment_id = dto.comment_id)
+                await self.comment_repo.delete(post_id = dto.post_id, id = dto.comment_id)
             return "success"
 
         except Exception as e:

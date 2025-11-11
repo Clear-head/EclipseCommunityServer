@@ -80,6 +80,11 @@ async def get_jwt_user_id(jwt: str = Header(None)) -> str:
     except jwt_token.InvalidTokenError as e:
         raise InvalidTokenException() from e
 
+    except Exception as e:
+        logger.error(type(e).__name__ + str(e))
+        traceback.print_exc()
+        raise e
+
 
 async def validate_jwt_token(jwt: str = Header(None)):
     """
@@ -117,4 +122,10 @@ async def validate_jwt_token(jwt: str = Header(None)):
         raise ExpiredAccessTokenException()
 
     except jwt_token.InvalidTokenError as e:
+        traceback.print_exc()
         raise InvalidTokenException() from e
+
+    except Exception as e:
+        logger.error(type(e).__name__ + str(e))
+        traceback.print_exc()
+        raise e

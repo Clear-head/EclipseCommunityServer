@@ -25,6 +25,7 @@ class ResponsePostDetail(BaseModel):
     user_nickname: str
     user_id: str
     comments: List[Comment]
+    merge_history_id: str
     create_at: datetime
 
 
