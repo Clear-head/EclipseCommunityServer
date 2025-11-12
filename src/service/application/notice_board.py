@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from src.common import dto
 from src.common.dto.comment_dto import RequestDeleteComment
 from src.common.dto.post_dto import Post, ResponsePostList, Comment, ResponsePostDetail, RequestWritePost, \
     RequestDeletePost
@@ -158,7 +157,6 @@ class NoticeBoard:
                 },
                 order="create_at"
             )
-            print(posts)
 
             return ResponsePostList(posts=posts)
 

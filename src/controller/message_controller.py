@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
-from src.common.dto.message_dto import SendMessage, RequestSendMessage
+from src.common.dto.message_dto import RequestSendMessage
 from src.common.utils.logger.custom_logger import get_logger
 from src.service.application.message_service import MessageService
 from src.service.auth.jwt import validate_jwt_token, get_jwt_user_id

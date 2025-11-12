@@ -1,12 +1,12 @@
-from fastapi import Depends, APIRouter, Header
+from fastapi import Depends, APIRouter
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from src.common.dto.comment_dto import RequestWriteComment, RequestDeleteComment
 from src.common.dto.post_dto import RequestWritePost, RequestDeletePost
 from src.common.utils.logger.custom_logger import get_logger
-from src.service.auth.jwt import validate_jwt_token, get_jwt_user_id
 from src.service.application.notice_board import NoticeBoard
+from src.service.auth.jwt import validate_jwt_token, get_jwt_user_id
 
 router = APIRouter(
     prefix="/api/community",
