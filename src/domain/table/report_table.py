@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Column, String, Table, DateTime, Integer, ForeignKey, Text
+from sqlalchemy import MetaData, Column, String, Table, DateTime, Integer, ForeignKey, Text, Boolean
 
 meta = MetaData()
 
@@ -12,4 +12,5 @@ report_table = Table(
     Column('cause_id', String, nullable=False),
     Column('cause', Text),
     Column('reported_at', DateTime),
+    Column('is_processed', Boolean, default=False, server_default='0', nullable=False),
 )
