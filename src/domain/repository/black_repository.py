@@ -1,13 +1,13 @@
-from src.domain.entity.merge_history_entity import MergeHistoryEntity
+from src.domain.entity.black_entity import BlackEntity
 from src.domain.repository.base_repository import BaseRepository
-from src.domain.table.table_merge_history import merge_history_table
+from src.domain.table.black_table import black_table
 
 
-class MergeHistoryRepository(BaseRepository):
+class BlackRepository(BaseRepository):
     def __init__(self):
-        super(MergeHistoryRepository, self).__init__()
-        self.table = merge_history_table
-        self.entity = MergeHistoryEntity
+        super(BlackRepository, self).__init__()
+        self.table = black_table
+        self.entity = BlackEntity
 
     async def insert(self, item):
         return await super().insert(item)

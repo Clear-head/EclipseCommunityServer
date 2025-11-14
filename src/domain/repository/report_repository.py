@@ -1,13 +1,13 @@
-from src.domain.entity.merge_history_entity import MergeHistoryEntity
+from src.domain.entity.report_entity import ReportEntity
 from src.domain.repository.base_repository import BaseRepository
-from src.domain.table.table_merge_history import merge_history_table
+from src.domain.table.report_table import report_table
 
 
-class MergeHistoryRepository(BaseRepository):
+class ReportRepository(BaseRepository):
     def __init__(self):
-        super(MergeHistoryRepository, self).__init__()
-        self.table = merge_history_table
-        self.entity = MergeHistoryEntity
+        super(ReportRepository, self).__init__()
+        self.table = report_table
+        self.entity = ReportEntity
 
     async def insert(self, item):
         return await super().insert(item)
