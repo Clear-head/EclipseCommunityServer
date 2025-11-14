@@ -21,16 +21,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    print(f"Method: {request.method}")
-    print(f"URL: {request.url}")
-    print(f"Headers: {dict(request.headers)}")
-    print(f"Query params: {dict(request.query_params)}")
-
-    response = await call_next(request)
-    return response
-
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8082)

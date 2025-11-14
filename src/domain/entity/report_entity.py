@@ -8,7 +8,7 @@ class ReportEntity(BaseEntity):
     id: Optional[int] = None
     user_id: str
     type: int
-    cause_id: str
+    cause_id: Optional[str]
     cause: str
     reporter: str
     reported_at: datetime
