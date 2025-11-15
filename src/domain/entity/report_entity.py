@@ -12,4 +12,4 @@ class ReportEntity(BaseEntity):
     cause: str
     reporter: str
     reported_at: datetime
-    is_processed : bool
+    is_processed : Optional[bool] = False

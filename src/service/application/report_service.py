@@ -23,7 +23,7 @@ class ReportService:
                 type=dto.type,
                 cause_id=dto.cause_id,
                 cause=dto.cause,
-                reported_at=datetime.now(),
+                reported_at=datetime.now()
             )
 
             await self.repo.insert(entity)
