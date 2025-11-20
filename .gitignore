@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 
-src/resources/
+src/resources/config
 
 # C extensions
 *.so
